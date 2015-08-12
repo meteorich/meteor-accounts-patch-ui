@@ -32,7 +32,7 @@ AccountsAnonymousUi.user = function () {
   return Meteor.users.findOne(userId);
 };
 
-AccountsAnonymousUi.withFakedUser = function (func) {
+AccountsAnonymousUi.wrapWithNoAnon = function (func) {
   return function (/*arguments*/) {
     var meteorUserId = Meteor.userId;
     var meteorUser = Meteor.user;

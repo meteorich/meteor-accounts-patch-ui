@@ -22,7 +22,7 @@ For `accounts-ui` derivatives and `useraccounts:bootstrap` with `useraccounts:ir
 For other packages, you'll need to figure out which of their functions use
 `Meteor.userId()` or `Meteor.user()` to detemine whether a user is logged in,
 and then wrap those functions using
-`AccountsAnonymousUi.withFakedUser(originalFunc)`. While `originalFunc` is
+`AccountsAnonymousUi.wrapWithNoAnon(originalFunc)`. While `originalFunc` is
 running, `Meteor.userId()` and `Meteor.user()` will return `null` if the current
 user is anonymous.
 
