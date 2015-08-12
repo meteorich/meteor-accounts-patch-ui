@@ -15,10 +15,10 @@ Package.onUse(function(api) {
   api.use('blaze', 'client');
   api.use('templating', 'client');
   api.use('underscore', 'client');
-  api.use('twbs:bootstrap', 'client', {weak: true});
-  api.use('useraccounts:bootstrap', 'client', {weak: true});
-  api.use('useraccounts:iron-routing', 'client', {weak: true});
   api.use('accounts-ui-unstyled', 'client', {weak: true});
+  api.use('twbs:bootstrap@3.3.1', 'client', {weak: true});
+  api.use('useraccounts:bootstrap@1.12.0', 'client', {weak: true});
+  api.use('useraccounts:iron-routing@1.12.0', 'client', {weak: true});
   api.addFiles('accounts-anonymous-ui.js', 'client');
   api.addFiles('patch-accounts-ui-unstyled.html', 'client');
   api.addFiles('patch-accounts-ui-unstyled.js', 'client');
