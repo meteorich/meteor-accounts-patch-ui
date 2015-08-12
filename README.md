@@ -28,6 +28,5 @@ user is anonymous.
 
 ## TODO
 
-- Add test for the routing overrides.
 - Support `useraccounts:*` with `useraccounts:flow-routing`.
-- Make `isAnonymous()` part of the API and configurable.
+- Make `isSignedUp()` part of the API and configurable.

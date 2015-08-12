@@ -37,6 +37,7 @@ wrapTemplateWithFakedUser(Template.atNavButton);
 wrapTemplateWithFakedUser(Template.atForm);
 
 var AccountsTemplates = Package['useraccounts:core'] && Package['useraccounts:iron-routing'] && Package['useraccounts:core'].AccountsTemplates;
+var Router = Package['iron:router'].Router;
 if (AccountsTemplates && AccountsTemplates.routes) {
   _.each(AccountsTemplates.routes, function (r, key) {
     var route = Router.routes[r.name];
