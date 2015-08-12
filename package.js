@@ -35,6 +35,5 @@ Package.onTest(function(api) {
   api.use('useraccounts:bootstrap@1.12.0');
   api.use('brettle:accounts-anonymous');
   api.use('brettle:accounts-anonymous-ui');
-  api.addFiles('accounts-anonymous-ui-tests.html', 'client');
   api.addFiles('accounts-anonymous-ui-tests.js', 'client');
 });
