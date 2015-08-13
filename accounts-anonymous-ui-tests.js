@@ -30,40 +30,43 @@ Tinytest.addAsync('AccountsAnonymousUi - useraccounts:core atNavButton shows Sig
   });
 });
 
-//Router = new Iron.Router;
-/*
-Router = new Iron.Router({
-  autoRender: false,
-  autoStart: false
-});
-*/
-Router.configure({
-  layoutTemplate: 'myLayout',
-});
-Router.route('/', function () {
-  this.render('myLayout');
-});
-AccountsTemplates.configure({
-  defaultLayout: 'myLayout',
-});
-
-AccountsTemplates.configureRoute('signIn');
-Tinytest.addAsync('AccountsAnonymousUi - useraccounts:iron-routing routes anonymous like logged out', function (test, done) {
-  Meteor.logout(function (err) {
-    test.isUndefined(err, 'No logout error');
-    AccountsTemplates.setState('hide');
-    Router.go('atSignIn');
-    Meteor.setTimeout(function () {
-      test.equal(AccountsTemplates.getState(), 'signIn', 'Logged out user routed to sign in');
-      AccountsAnonymous.login(function (err) {
-        test.isUndefined(err, 'No login error');
-        AccountsTemplates.setState('hide');
-        Router.go('atSignIn');
-        Meteor.setTimeout(function () {
-          test.equal(AccountsTemplates.getState(), 'signIn', 'Anonymous user routed to sign in');
-          done();
-        }, 100);
-      });
-    }, 100);
+// Iron Router starting seems to make PhantomJS unhappy for some reason.
+if (window.callPhantom) {
+  Router.configure({
+    autoStart: false
   });
-});
+} else {
+  // Non PhantomJS configuration and tests.
+  Router.configure({
+    layoutTemplate: 'myLayout',
+    autoRender: false,
+    autoStart: true
+  });
+  Router.route('/', function () {
+    this.render('myLayout');
+  });
+  AccountsTemplates.configure({
+    defaultLayout: 'myLayout',
+  });
+  AccountsTemplates.configureRoute('signIn');
+
+  Tinytest.addAsync('AccountsAnonymousUi - useraccounts:iron-routing routes anonymous like logged out', function (test, done) {
+    Meteor.logout(function (err) {
+      test.isUndefined(err, 'No logout error');
+      AccountsTemplates.setState('hide');
+      Router.go('atSignIn');
+      Meteor.setTimeout(function () {
+        test.equal(AccountsTemplates.getState(), 'signIn', 'Logged out user routed to sign in');
+        AccountsAnonymous.login(function (err) {
+          test.isUndefined(err, 'No login error');
+          AccountsTemplates.setState('hide');
+          Router.go('atSignIn');
+          Meteor.setTimeout(function () {
+            test.equal(AccountsTemplates.getState(), 'signIn', 'Anonymous user routed to sign in');
+            done();
+          }, 100);
+        });
+      }, 100);
+    });
+  });
+}
