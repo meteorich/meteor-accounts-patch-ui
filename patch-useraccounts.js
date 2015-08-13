@@ -37,15 +37,15 @@ wrapTemplateWithNoAnon(Template.atNavButton);
 wrapTemplateWithNoAnon(Template.atForm);
 
 var AccountsTemplates = Package['useraccounts:core'] && Package['useraccounts:iron-routing'] && Package['useraccounts:core'].AccountsTemplates;
-var Router = Package['iron:router'].Router;
-if (AccountsTemplates && AccountsTemplates.routes) {
+var Router = Package['iron:router'] && Package['iron:router'].Router;
+if (AccountsTemplates && AccountsTemplates.routes && Router) {
   _.each(AccountsTemplates.routes, function (r, key) {
     var route = Router.routes[r.name];
     wrapRouteHooksWithNoAnon(route);
   });
 }
 
-if (AccountsTemplates && AccountsTemplates.configureRoute) {
+if (AccountsTemplates && AccountsTemplates.configureRoute && Router) {
   var origConfigureRoute = AccountsTemplates.configureRoute;
   AccountsTemplates.configureRoute = function (routeCode, options) {
     var ret = origConfigureRoute.call(this, routeCode, options);
