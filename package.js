@@ -1,6 +1,6 @@
 Package.describe({
   name: 'brettle:accounts-anonymous-ui',
-  version: '0.1.0',
+  version: '0.2.0',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages so anonymous users can sign up and sign in.',
   // URL to the Git repository containing the source code for this package.
@@ -11,7 +11,7 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.0.4.1');
+  api.versionsFrom('1.0.4');
   api.use('underscore', 'client');
   api.use('accounts-base', 'client');
   api.use('templating', 'client');
@@ -35,7 +35,7 @@ Package.onUse(function(api) {
   // re-test this package with the new release, and add the supported version
   // below.
   // We monkey patch the _helpers and _eventMaps Template properties blaze manages.
-  api.use('blaze@=2.1.2', 'client');
+  api.use('blaze@=2.1.2 || =2.1.1 || =2.1.0', 'client');
   // We copied and modifed the loginButtons template which refers to
   // _loginButtons* templates.
   api.use('accounts-ui-unstyled@=1.1.7', 'client', { weak: true });
@@ -58,7 +58,7 @@ Package.onUse(function(api) {
 });
 
 Package.onTest(function(api) {
-  api.versionsFrom('1.0.4.1');
+  api.versionsFrom('1.0.4');
   api.use('tinytest');
   api.use('accounts-ui-unstyled');
   api.use('templating', 'client');
