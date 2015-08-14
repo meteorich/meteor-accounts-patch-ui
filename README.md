@@ -8,7 +8,7 @@ users so that they can sign up and sign in.
 ## Features
 
 - Supports `accounts-ui` derivatives and `useraccounts:bootstrap` when using `useraccounts:iron-routing`
-- Provides utility functions to modify other packages
+- Provides a utility function to help monkey patch other packages
 
 ## Installation
 ```sh
@@ -28,5 +28,5 @@ user is anonymous.
 
 ## TODO
 
-- Support `useraccounts:*` with `useraccounts:flow-routing`.
+- Support `useraccounts:*`
 - Make `isSignedUp()` part of the API and configurable.

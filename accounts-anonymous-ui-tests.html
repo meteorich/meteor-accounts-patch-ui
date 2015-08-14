@@ -1,5 +1,11 @@
-<template name="myLayout">
+<template name="myIronLayout">
   <div id="content">
     {{> yield}}
+  </div>
+</template>
+
+<template name="myFlowLayout">
+  <div id="content">
+    {{> Template.dynamic template=main}}
   </div>
 </template>
