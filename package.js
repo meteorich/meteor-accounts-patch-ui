@@ -66,9 +66,9 @@ Package.onTest(function(api) {
   api.use('twbs:bootstrap');
   api.use('useraccounts:bootstrap@1.12.0');
 
-// Uncomment one of the following two lines to depending on which useraccounts
-// routing package you want to test:
-//  api.use('useraccounts:iron-routing@1.12.0');
+  // Uncomment one of the following two lines to depending on which useraccounts
+  // routing package you want to test:
+  //  api.use('useraccounts:iron-routing@1.12.0');
   api.use('useraccounts:flow-routing@1.12.0');
 
   api.use('brettle:accounts-anonymous');
