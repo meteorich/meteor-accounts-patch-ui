@@ -1,5 +1,20 @@
 "use strict";
 /* globals AccountsAnonymous, AccountsTemplates, FlowRouter, Iron */
+Tinytest.add(
+  'AccountsAnonymousUi - accounts-ui loginButtons is clickable',
+  function (test) {
+    var mapWithClickEvent =
+      _.find(Template.loginButtons.__eventMaps, function (map) {
+        return _.find(_.keys(map), function (selector) {
+          var re = /^click/;
+          return re.test(selector);
+        });
+      }
+    );
+
+    test.isNotUndefined(mapWithClickEvent, 'No click event found');
+  }
+);
 
 Tinytest.addAsync(
   'AccountsAnonymousUi - accounts-ui loginButtons shows Sign In when anonymous',

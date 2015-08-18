@@ -1,33 +1,6 @@
 "use strict";
 /* globals AccountsAnonymousUi, Iron */
 
-function wrapTemplateWithNoAnon(template) {
-  if (!template) {
-    return;
-  }
-  wrapMethodsWithNoAnon(template.__helpers);
-  if (!_.isArray(template.__eventMaps)) {
-    throw new TypeError('__eventMaps not an Array');
-  }
-  _.each(template.__eventMaps, function(value, index, eventMaps) {
-    wrapMethodsWithNoAnon(eventMaps[index]);
-  });
-}
-
-function wrapMethodsWithNoAnon(obj) {
-  if (obj === undefined) {
-    return;
-  }
-  if (!_.isObject(obj)) {
-    throw new TypeError('Not an object');
-  }
-  _.each(obj, function(value, key) {
-    if (_.isFunction(value)) {
-      obj[key] = AccountsAnonymousUi.wrapWithNoAnon(value);
-    }
-  });
-}
-
 function wrapRouteHooksWithNoAnon(route) {
   _.each(Iron.Router.HOOK_TYPES, function(hookType) {
     if (_.isFunction(route.options[hookType])) {
@@ -52,8 +25,8 @@ function wrapFlowRouteHooksWithNoAnon(route) {
   });
 }
 
-wrapTemplateWithNoAnon(Template.atNavButton);
-wrapTemplateWithNoAnon(Template.atForm);
+AccountsAnonymousUi._wrapTemplateWithNoAnon(Template.atNavButton);
+AccountsAnonymousUi._wrapTemplateWithNoAnon(Template.atForm);
 
 var AccountsTemplates =
   Package['useraccounts:core'] &&

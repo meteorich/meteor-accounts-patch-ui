@@ -43,6 +43,8 @@ var noAnonUserFunc = function() {
   return (user ? user : null);
 };
 
+AccountsAnonymousUi._noAnonUser = noAnonUserFunc;
+
 /** Returns a function that will execute the passed function with a version
  * `Meteor.userId()` and `Meteor.user()` that return null for anonymous users.
  * @param {Function} func - the function to wrap.
@@ -62,3 +64,30 @@ AccountsAnonymousUi.wrapWithNoAnon = function(func) {
     }
   };
 };
+
+AccountsAnonymousUi._wrapTemplateWithNoAnon = function(template) {
+  if (! template) {
+    return;
+  }
+  wrapMethodsWithNoAnon(template.__helpers);
+  if (! _.isArray(template.__eventMaps)) {
+    throw new TypeError('__eventMaps not an Array');
+  }
+  _.each(template.__eventMaps, function(value, index, eventMaps) {
+    wrapMethodsWithNoAnon(eventMaps[index]);
+  });
+};
+
+function wrapMethodsWithNoAnon(obj) {
+  if (obj === undefined) {
+    return;
+  }
+  if (! _.isObject(obj)) {
+    throw new TypeError('Not an object');
+  }
+  _.each(obj, function(value, key) {
+    if (_.isFunction(value)) {
+      obj[key] = AccountsAnonymousUi.wrapWithNoAnon(value);
+    }
+  });
+}

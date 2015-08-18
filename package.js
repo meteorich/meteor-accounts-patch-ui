@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-anonymous-ui',
-  version: '0.3.0',
+  version: '0.3.1',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages so anonymous users can sign ' +
     'up and sign in.',
@@ -58,7 +58,6 @@ Package.onUse(function(api) {
 
   api.export('AccountsAnonymousUi');
   api.addFiles('accounts-anonymous-ui.js', 'client');
-  api.addFiles('patch-accounts-ui-unstyled.html', 'client');
   api.addFiles('patch-accounts-ui-unstyled.js', 'client');
   api.addFiles('patch-useraccounts.js', 'client');
 });

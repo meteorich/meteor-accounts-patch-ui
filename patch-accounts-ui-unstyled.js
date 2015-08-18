@@ -2,13 +2,13 @@
 /* globals AccountsAnonymousUi */
 
 if (Package['accounts-ui-unstyled']) {
-  Template.registerHelper("AccountsAnonymousUi_isSignedIn",
-    AccountsAnonymousUi.wrapWithNoAnon(function () {
-      return (Meteor.userId() !== null);
-    })
-  );
-  var loginButtonsTemplate = Template.loginButtons;
-  if (loginButtonsTemplate) {
-    Template.loginButtons = Template.accountsAnonymousUiLoginButtons;
+  if (Template.loginButtons) {
+    // Override global currentUser to hide anonymous users just for this
+    // template.
+    Template.loginButtons.helpers({
+      currentUser: function () {
+        return AccountsAnonymousUi._noAnonUser();
+      }
+    });
   }
 }
