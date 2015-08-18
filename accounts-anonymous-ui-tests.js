@@ -1,8 +1,11 @@
+"use strict";
+/* globals AccountsAnonymous, AccountsTemplates, FlowRouter, Iron */
+
 Tinytest.addAsync(
   'AccountsAnonymousUi - accounts-ui loginButtons shows Sign In when anonymous',
   function(test, done) {
     test.isNotUndefined(Template.loginButtons, 'Template.loginButtons');
-    if (!Template.loginButtons) return done();
+    if (!Template.loginButtons) { return done(); }
     Meteor.logout(function(err) {
       test.isUndefined(err, 'No logout error');
       var actualHtml = Blaze.toHTML(Template.loginButtons);
@@ -21,7 +24,7 @@ Tinytest.addAsync(
   'AccountsAnonymousUi - useraccounts atNavButton shows Sign In when anonymous',
   function(test, done) {
     test.isNotUndefined(Template.atNavButton, 'Template.atNavButton');
-    if (!Template.atNavButton) return done();
+    if (!Template.atNavButton) { return done(); }
     Meteor.logout(function(err) {
       test.isUndefined(err, 'No logout error');
       var actualHtml = Blaze.toHTML(Template.atNavButton);
@@ -77,9 +80,10 @@ Tinytest.addAsync(
   function(test, done) {
     Meteor.logout(function(err) {
       test.isUndefined(err, 'No logout error');
-      // Need to start at a path that isn't handled by the useraccounts:*-routing
-      // to ensure that going to an accounts-related route triggers a change in state.
-      // Important for useraccounts:flow-routing in particular. Might be a bug in
+      // Need to start at a path that isn't handled by the
+      // useraccounts:*-routing to ensure that going to an accounts-related
+      // route triggers a change in state. Important for
+      // useraccounts:flow-routing in particular. Might be a bug in
       // useraccounts:flow-routing or kadira:flow-router.
       theRouter.go('/');
       AccountsTemplates.setState('hide');

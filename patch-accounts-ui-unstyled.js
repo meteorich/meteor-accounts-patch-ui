@@ -1,7 +1,10 @@
+"use strict";
+/* globals AccountsAnonymousUi */
+
 if (Package['accounts-ui-unstyled']) {
   Template.registerHelper("AccountsAnonymousUi_isSignedIn",
     AccountsAnonymousUi.wrapWithNoAnon(function () {
-      return (Meteor.userId() != null);
+      return (Meteor.userId() !== null);
     })
   );
   var loginButtonsTemplate = Template.loginButtons;

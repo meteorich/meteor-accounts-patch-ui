@@ -7,7 +7,9 @@ users so that they can sign up and sign in.
 
 ## Features
 
-- Supports `accounts-ui` derivatives and `useraccounts:bootstrap` when using `useraccounts:iron-routing`
+- Supports `accounts-ui` derivatives and `useraccounts:bootstrap` when using
+  `useraccounts:iron-routing`
+
 - Provides a utility function to help monkey patch other packages
 
 ## Installation
@@ -17,7 +19,8 @@ meteor add brettle:accounts-anonymous-ui
 
 ## Usage
 
-For `accounts-ui` derivatives and `useraccounts:bootstrap` with `useraccounts:iron-routing`, it should just work once it is installed.
+For `accounts-ui` derivatives and `useraccounts:bootstrap`, it should just work
+once it is installed.
 
 For other packages, you'll need to figure out which of their functions use
 `Meteor.userId()` or `Meteor.user()` to detemine whether a user is logged in,
@@ -28,5 +31,6 @@ user is anonymous.
 
 ## TODO
 
-- Support `useraccounts:*`
+- Test support for `useraccounts` flavors other than `useraccounts:bootstrap`
+
 - Make `isSignedUp()` part of the API and configurable.

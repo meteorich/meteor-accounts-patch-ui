@@ -1,3 +1,6 @@
+"use strict";
+/* globals AccountsAnonymousUi, Iron */
+
 function wrapTemplateWithNoAnon(template) {
   if (!template) {
     return;
@@ -9,7 +12,7 @@ function wrapTemplateWithNoAnon(template) {
   _.each(template.__eventMaps, function(value, index, eventMaps) {
     wrapMethodsWithNoAnon(eventMaps[index]);
   });
-};
+}
 
 function wrapMethodsWithNoAnon(obj) {
   if (obj === undefined) {
@@ -23,7 +26,7 @@ function wrapMethodsWithNoAnon(obj) {
       obj[key] = AccountsAnonymousUi.wrapWithNoAnon(value);
     }
   });
-};
+}
 
 function wrapRouteHooksWithNoAnon(route) {
   _.each(Iron.Router.HOOK_TYPES, function(hookType) {
@@ -53,21 +56,22 @@ wrapTemplateWithNoAnon(Template.atNavButton);
 wrapTemplateWithNoAnon(Template.atForm);
 
 var AccountsTemplates =
-  Package['useraccounts:core'] && Package['useraccounts:core'].AccountsTemplates
+  Package['useraccounts:core'] &&
+  Package['useraccounts:core'].AccountsTemplates;
 if (Package['useraccounts:iron-routing']) {
-  var Router = Package['iron:router'] && Package['iron:router'].Router;
-  if (AccountsTemplates && AccountsTemplates.routes && Router) {
-    _.each(AccountsTemplates.routes, function(r, key) {
-      var route = Router.routes[r.name];
+  var IronRouter = Package['iron:router'] && Package['iron:router'].Router;
+  if (AccountsTemplates && AccountsTemplates.routes && IronRouter) {
+    _.each(AccountsTemplates.routes, function(r) {
+      var route = IronRouter.routes[r.name];
       wrapRouteHooksWithNoAnon(route);
     });
   }
 
-  if (AccountsTemplates && AccountsTemplates.configureRoute && Router) {
+  if (AccountsTemplates && AccountsTemplates.configureRoute && IronRouter) {
     var origConfigureRoute = AccountsTemplates.configureRoute;
     AccountsTemplates.configureRoute = function(routeCode, options) {
       var ret = origConfigureRoute.call(this, routeCode, options);
-      var route = Router.routes[AccountsTemplates.routes[routeCode].name];
+      var route = IronRouter.routes[AccountsTemplates.routes[routeCode].name];
       wrapRouteHooksWithNoAnon(route);
       return ret;
     };
@@ -86,19 +90,20 @@ if (Package['useraccounts:iron-routing']) {
             router[methodName] = function(hook, options) {
               return origMethods[methodName].
                 call(router, AccountsAnonymousUi.wrapWithNoAnon(hook), options);
-            }
+            };
           }
         }
       );
+      var ret;
       try {
-        var ret = origEnsureSignedInPlugin(router, options);
+        ret = origEnsureSignedInPlugin(router, options);
       } finally {
         _.each(_.keys(origMethods), function(methodName) {
           router[methodName] = origMethods[methodName];
         });
       }
       return ret;
-    }
+    };
   }
 } else if (Package['useraccounts:flow-routing']) {
   var FlowRouter =
@@ -128,8 +133,8 @@ if (Package['useraccounts:iron-routing']) {
 
 function lookupFlowRoute(name, code) {
   var route = FlowRouter._routesMap[name];
-  // Looks like configureRoute sometimes uses the route code instead of the route name.
-  // Probably a bug.
+  // Looks like configureRoute sometimes uses the route code instead of the
+  // route name. Probably a bug.
   if (!route) {
     route = FlowRouter._routesMap[code];
   }

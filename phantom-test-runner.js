@@ -1,3 +1,6 @@
+"use strict";
+/* globals require, DONE, TEST_STATUS, phantom */
+
 var page = require('webpage').create();
 var system = require('system');
 var platform = system.args[1] || "local";
@@ -8,14 +11,16 @@ page.onConsoleMessage = function (message) {
 page.open(system.env.URL + platform);
 setInterval(function () {
   var done = page.evaluate(function () {
-    if (typeof TEST_STATUS !== 'undefined')
+    if (typeof TEST_STATUS !== 'undefined') {
       return TEST_STATUS.DONE;
+    }
     return typeof DONE !== 'undefined' && DONE;
   });
   if (done) {
     var failures = page.evaluate(function () {
-      if (typeof TEST_STATUS !== 'undefined')
+      if (typeof TEST_STATUS !== 'undefined') {
         return TEST_STATUS.FAILURES;
+      }
       if (typeof FAILURES === 'undefined') {
         return 1;
       }

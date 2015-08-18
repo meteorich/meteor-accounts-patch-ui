@@ -1,9 +1,11 @@
+"use strict";
+/* globals AccountsAnonymousUi: true */
+
 AccountsAnonymousUi = {};
 
 // Remember the official Meteor versions of the functions we will be
 // monkey patching.
 var meteorUserIdFunc = Meteor.userId;
-var meteorUserFunc = Meteor.user;
 
 // A version of Meteor.userId() that returns null for anonymous users.
 var noAnonUserIdFunc = function() {
@@ -59,4 +61,4 @@ AccountsAnonymousUi.wrapWithNoAnon = function(func) {
       Meteor.user = savedUserFunc;
     }
   };
-}
+};
