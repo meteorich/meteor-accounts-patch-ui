@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-anonymous-ui',
-  version: '0.3.1',
+  version: '0.3.2',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages so anonymous users can sign ' +
     'up and sign in.',

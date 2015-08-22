@@ -19,11 +19,10 @@ meteor add brettle:accounts-anonymous-ui
 
 ## Usage
 
-For `accounts-ui` derivatives and `useraccounts:bootstrap`, it should just work
-once it is installed.
+For `accounts-ui` derivatives and `useraccounts:bootstrap`, it should just work.
 
 For other packages, you'll need to figure out which of their functions use
-`Meteor.userId()` or `Meteor.user()` to detemine whether a user is logged in,
+`Meteor.userId()` or `Meteor.user()` to detect signed out users,
 and then wrap those functions using
 `AccountsAnonymousUi.wrapWithNoAnon(originalFunc)`. While `originalFunc` is
 running, `Meteor.userId()` and `Meteor.user()` will return `null` if the current
