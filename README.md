@@ -5,6 +5,10 @@
 Monkey patches accounts UI packages to treat anonymous users like logged out
 users so that they can sign up and sign in.
 
+This package is part of the `brettle:accounts-*` suite of packages. See
+[`brettle:accounts-deluxe`](https://atmospherejs.com/brettle/accounts-deluxe)
+for an overview of the suite and a live demo.
+
 ## Features
 
 - Supports `accounts-ui` derivatives and `useraccounts:bootstrap` when using
