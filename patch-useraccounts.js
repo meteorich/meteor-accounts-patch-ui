@@ -1,32 +1,32 @@
 "use strict";
-/* globals AccountsAnonymousUi, Iron */
+/* globals AccountsPatchUi, Iron */
 
-function wrapRouteHooksWithNoAnon(route) {
+function wrapRouteHooksWithSignedUp(route) {
   _.each(Iron.Router.HOOK_TYPES, function(hookType) {
     if (_.isFunction(route.options[hookType])) {
       route.options[hookType] =
-        AccountsAnonymousUi.wrapWithNoAnon(route.options[hookType]);
+        AccountsPatchUi.wrapWithSignedUp(route.options[hookType]);
     }
   });
 }
 
-function wrapFlowRouteHooksWithNoAnon(route) {
+function wrapFlowRouteHooksWithSignedUp(route) {
   if (_.isFunction(route._action)) {
-    route._action = AccountsAnonymousUi.wrapWithNoAnon(route._action);
+    route._action = AccountsPatchUi.wrapWithSignedUp(route._action);
   }
   _.each(['triggersEnter', 'triggersExit'], function(hookType) {
     if (_.isArray(route.options[hookType])) {
       _.each(route.options[hookType], function(cb, i, arr) {
         if (_.isFunction(cb)) {
-          arr[i] = AccountsAnonymousUi.wrapWithNoAnon(cb);
+          arr[i] = AccountsPatchUi.wrapWithSignedUp(cb);
         }
       });
     }
   });
 }
 
-AccountsAnonymousUi._wrapTemplateWithNoAnon(Template.atNavButton);
-AccountsAnonymousUi._wrapTemplateWithNoAnon(Template.atForm);
+AccountsPatchUi._wrapTemplateWithSignedUp(Template.atNavButton);
+AccountsPatchUi._wrapTemplateWithSignedUp(Template.atForm);
 
 var AccountsTemplates =
   Package['useraccounts:core'] &&
@@ -36,7 +36,7 @@ if (Package['useraccounts:iron-routing']) {
   if (AccountsTemplates && AccountsTemplates.routes && IronRouter) {
     _.each(AccountsTemplates.routes, function(r) {
       var route = IronRouter.routes[r.name];
-      wrapRouteHooksWithNoAnon(route);
+      wrapRouteHooksWithSignedUp(route);
     });
   }
 
@@ -45,13 +45,13 @@ if (Package['useraccounts:iron-routing']) {
     AccountsTemplates.configureRoute = function(routeCode, options) {
       var ret = origConfigureRoute.call(this, routeCode, options);
       var route = IronRouter.routes[AccountsTemplates.routes[routeCode].name];
-      wrapRouteHooksWithNoAnon(route);
+      wrapRouteHooksWithSignedUp(route);
       return ret;
     };
 
     var origEnsureSignedIn = AccountsTemplates.ensureSignedIn;
     AccountsTemplates.ensureSignedIn =
-      AccountsAnonymousUi.wrapWithNoAnon(origEnsureSignedIn);
+      AccountsPatchUi.wrapWithSignedUp(origEnsureSignedIn);
 
     var origEnsureSignedInPlugin = Iron.Router.plugins.ensureSignedIn;
     Iron.Router.plugins.ensureSignedIn = function(router, options) {
@@ -62,7 +62,7 @@ if (Package['useraccounts:iron-routing']) {
             origMethods[methodName] = router[methodName];
             router[methodName] = function(hook, options) {
               return origMethods[methodName].
-                call(router, AccountsAnonymousUi.wrapWithNoAnon(hook), options);
+                call(router, AccountsPatchUi.wrapWithSignedUp(hook), options);
             };
           }
         }
@@ -84,7 +84,7 @@ if (Package['useraccounts:iron-routing']) {
   if (AccountsTemplates && AccountsTemplates.routes && FlowRouter) {
     _.each(AccountsTemplates.routes, function(r, key) {
       var route = lookupFlowRoute(r.name, key);
-      wrapFlowRouteHooksWithNoAnon(route);
+      wrapFlowRouteHooksWithSignedUp(route);
     });
   }
 
@@ -94,13 +94,13 @@ if (Package['useraccounts:iron-routing']) {
       var ret = origConfigureRoute.call(this, routeCode, options);
       var route =
         lookupFlowRoute(AccountsTemplates.routes[routeCode].name, routeCode);
-      wrapFlowRouteHooksWithNoAnon(route);
+      wrapFlowRouteHooksWithSignedUp(route);
       return ret;
     };
 
     var origEnsureSignedIn = AccountsTemplates.ensureSignedIn;
     AccountsTemplates.ensureSignedIn =
-      AccountsAnonymousUi.wrapWithNoAnon(origEnsureSignedIn);
+      AccountsPatchUi.wrapWithSignedUp(origEnsureSignedIn);
   }
 }
 

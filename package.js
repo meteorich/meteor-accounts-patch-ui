@@ -1,13 +1,13 @@
 "use strict";
 
 Package.describe({
-  name: 'brettle:accounts-anonymous-ui',
-  version: '0.3.2',
+  name: 'brettle:accounts-patch-ui',
+  version: '0.0.1',
   // Brief, one-line summary of the package.
-  summary: 'Monkey patches accounts UI packages so anonymous users can sign ' +
-    'up and sign in.',
+  summary: 'Monkey patches accounts UI packages to support logged in users ' +
+    'who have not signed up.',
   // URL to the Git repository containing the source code for this package.
-  git: 'https://github.com/brettle/meteor-accounts-anonymous-ui.git',
+  git: 'https://github.com/brettle/meteor-accounts-patch-ui.git',
   // By default, Meteor will default to using README.md for documentation.
   // To avoid submitting documentation, set this field to null.
   documentation: 'README.md'
@@ -18,6 +18,9 @@ Package.onUse(function(api) {
   api.use('underscore', 'client');
   api.use('accounts-base', 'client');
   api.use('templating', 'client');
+
+  // Allows other packages/apps to help determine whether a user has signed up.
+  api.use('brettle:accounts-login-state@0.0.1');
 
   // Whater UI variation is being used, it needs to load first so that
   // we can monkey patch it's atNav and atForm templates.
@@ -56,8 +59,8 @@ Package.onUse(function(api) {
   api.use('useraccounts:iron-routing@1.12.1', 'client', { weak: true });
   api.use('useraccounts:flow-routing@1.12.0', 'client', { weak: true });
 
-  api.export('AccountsAnonymousUi');
-  api.addFiles('accounts-anonymous-ui.js', 'client');
+  api.export('AccountsPatchUi');
+  api.addFiles('accounts-patch-ui.js', 'client');
   api.addFiles('patch-accounts-ui-unstyled.js', 'client');
   api.addFiles('patch-useraccounts.js', 'client');
 });
@@ -77,7 +80,7 @@ Package.onTest(function(api) {
   //api.use('useraccounts:flow-routing@1.12.0');
 
   api.use('brettle:accounts-anonymous');
-  api.use('brettle:accounts-anonymous-ui');
-  api.addFiles('accounts-anonymous-ui-tests.html', 'client');
-  api.addFiles('accounts-anonymous-ui-tests.js', 'client');
+  api.use('brettle:accounts-patch-ui');
+  api.addFiles('accounts-patch-ui-tests.html', 'client');
+  api.addFiles('accounts-patch-ui-tests.js', 'client');
 });

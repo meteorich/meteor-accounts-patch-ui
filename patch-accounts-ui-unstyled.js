@@ -1,13 +1,13 @@
 "use strict";
-/* globals AccountsAnonymousUi */
+/* globals AccountsPatchUi */
 
 if (Package['accounts-ui-unstyled']) {
   if (Template.loginButtons) {
-    // Override global currentUser to hide anonymous users just for this
-    // template.
+    // Override global currentUser to hide users who are logged in but not
+    // signed up, just for this template.
     Template.loginButtons.helpers({
       currentUser: function () {
-        return AccountsAnonymousUi._noAnonUser();
+        return AccountsPatchUi._signedUpUser();
       }
     });
   }

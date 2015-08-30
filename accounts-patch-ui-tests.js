@@ -1,7 +1,7 @@
 "use strict";
 /* globals AccountsAnonymous, AccountsTemplates, FlowRouter, Iron */
 Tinytest.add(
-  'AccountsAnonymousUi - accounts-ui loginButtons is clickable',
+  'AccountsPatchUi - accounts-ui loginButtons is clickable',
   function (test) {
     var mapWithClickEvent =
       _.find(Template.loginButtons.__eventMaps, function (map) {
@@ -17,7 +17,7 @@ Tinytest.add(
 );
 
 Tinytest.addAsync(
-  'AccountsAnonymousUi - accounts-ui loginButtons shows Sign In when anonymous',
+  'AccountsPatchUi - accounts-ui loginButtons shows Sign In when anonymous',
   function(test, done) {
     test.isNotUndefined(Template.loginButtons, 'Template.loginButtons');
     if (!Template.loginButtons) { return done(); }
@@ -36,7 +36,7 @@ Tinytest.addAsync(
 );
 
 Tinytest.addAsync(
-  'AccountsAnonymousUi - useraccounts atNavButton shows Sign In when anonymous',
+  'AccountsPatchUi - useraccounts atNavButton shows Sign In when anonymous',
   function(test, done) {
     test.isNotUndefined(Template.atNavButton, 'Template.atNavButton');
     if (!Template.atNavButton) { return done(); }
@@ -91,7 +91,7 @@ if (Package['useraccounts:iron-routing']) {
 AccountsTemplates.configureRoute('signIn');
 
 Tinytest.addAsync(
-  'AccountsAnonymousUi - ' + routerPkgName + ' routes anon like logged out',
+  'AccountsPatchUi - ' + routerPkgName + ' routes anon like logged out',
   function(test, done) {
     Meteor.logout(function(err) {
       test.isUndefined(err, 'No logout error');
