@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-patch-ui',
-  version: '0.0.1',
+  version: '0.1.0',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
     'who have not signed up.',
@@ -18,6 +18,7 @@ Package.onUse(function(api) {
   api.use('underscore', 'client');
   api.use('accounts-base', 'client');
   api.use('templating', 'client');
+  api.use('accounts-ui-unstyled', 'client', { weak: true });
 
   // Allows other packages/apps to help determine whether a user has signed up.
   api.use('brettle:accounts-login-state@0.0.1');
@@ -44,14 +45,12 @@ Package.onUse(function(api) {
   // We monkey patch the _helpers and _eventMaps Template properties blaze
   // manages.
   api.use('blaze@=2.1.2 || =2.1.1 || =2.1.0', 'client');
-  // We copied and modifed the loginButtons template which refers to
-  // _loginButtons* templates.
-  api.use('accounts-ui-unstyled@=1.1.7', 'client', { weak: true });
   // Among other things, we assume that the hooks in the options object are used
   // directly, not copied.
   api.use('iron:router@=1.0.9', 'client', { weak: true });
   // Among other things, we use the internal _routesMap and _action properties.
-  api.use('kadira:flow-router@=2.2.0', 'client', { weak: true });
+  api.use('kadira:flow-router@=2.4.0 || =2.3.0 || =2.2.0', 'client',
+    { weak: true });
 
   // We don't rely on the internals of these packages, but we do rely on
   // Router.routes and FlowRouter.routes which are undocumented, so we
@@ -76,8 +75,8 @@ Package.onTest(function(api) {
 
   // Uncomment one of the following two lines to depending on which useraccounts
   // routing package you want to test:
-  api.use('useraccounts:iron-routing@1.12.0');
-  //api.use('useraccounts:flow-routing@1.12.0');
+  //api.use('useraccounts:iron-routing@1.12.0');
+  api.use('useraccounts:flow-routing@1.12.0');
 
   api.use('brettle:accounts-anonymous');
   api.use('brettle:accounts-patch-ui');
