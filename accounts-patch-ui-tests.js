@@ -66,23 +66,23 @@ if (Package['useraccounts:iron-routing']) {
     });
   }
   Router.configure({
-    layoutTemplate: 'myIronLayout',
+    layoutTemplate: 'aputIronLayout',
     autoRender: false,
   });
   theRouter.route('/', function() {
-    this.render('myIronLayout');
+    this.render('aputIronLayout');
   });
   AccountsTemplates.configure({
-    defaultLayout: 'myIronLayout',
+    defaultLayout: 'aputIronLayout',
   });
 } else if (Package['useraccounts:flow-routing']) {
   routerPkgName = 'useraccounts:flow-routing';
   theRouter = FlowRouter;
   theRouter.route('/', function() {
-    this.render('myFlowLayout');
+    this.render('aputFlowLayout');
   });
   AccountsTemplates.configure({
-    defaultLayout: 'myFlowLayout',
+    defaultLayout: 'aputFlowLayout',
     defaultLayoutRegions: {},
     defaultContentRegion: 'main'
   });

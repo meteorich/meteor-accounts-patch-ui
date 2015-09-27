@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-patch-ui',
-  version: '0.1.0',
+  version: '0.1.1',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
     'who have not signed up.',
@@ -21,9 +21,9 @@ Package.onUse(function(api) {
   api.use('accounts-ui-unstyled', 'client', { weak: true });
 
   // Allows other packages/apps to help determine whether a user has signed up.
-  api.use('brettle:accounts-login-state@0.0.1');
+  api.use('brettle:accounts-login-state@0.0.3');
 
-  // Whater UI variation is being used, it needs to load first so that
+  // Whatever UI variation is being used, it needs to load first so that
   // we can monkey patch it's atNav and atForm templates.
   // Tested:
   api.use('useraccounts:bootstrap@1.12.0', 'client', { weak: true });
@@ -44,12 +44,12 @@ Package.onUse(function(api) {
 
   // We monkey patch the _helpers and _eventMaps Template properties blaze
   // manages.
-  api.use('blaze@=2.1.2 || =2.1.1 || =2.1.0', 'client');
+  api.use('blaze@=2.1.3 || 2.1.2 || =2.1.1 || =2.1.0', 'client');
   // Among other things, we assume that the hooks in the options object are used
   // directly, not copied.
   api.use('iron:router@=1.0.9', 'client', { weak: true });
   // Among other things, we use the internal _routesMap and _action properties.
-  api.use('kadira:flow-router@=2.4.0 || =2.3.0 || =2.2.0', 'client',
+  api.use('kadira:flow-router@=2.6.2 || =2.4.0 || =2.3.0 || =2.2.0', 'client',
     { weak: true });
 
   // We don't rely on the internals of these packages, but we do rely on
@@ -69,17 +69,36 @@ Package.onTest(function(api) {
   api.use('tinytest');
   api.use('accounts-ui-unstyled');
   api.use('templating', 'client');
+  api.use('underscore');
+  api.use('tracker');
   api.use('accounts-password');
   api.use('twbs:bootstrap');
   api.use('useraccounts:bootstrap@1.12.0');
 
   // Uncomment one of the following two lines to depending on which useraccounts
   // routing package you want to test:
-  //api.use('useraccounts:iron-routing@1.12.0');
+  // api.use('useraccounts:iron-routing@1.12.0');
   api.use('useraccounts:flow-routing@1.12.0');
 
-  api.use('brettle:accounts-anonymous');
+  api.use('brettle:accounts-anonymous@0.3.1');
   api.use('brettle:accounts-patch-ui');
+
+  // Workaround useraccounts:iron-routing package not depending on tracker and
+  // ejson as required by Meteor 1.2.
+  api.use('ejson');
+  api.imply('tracker');
+  api.imply('ejson');
+
+  // Workaround kadira:flow-layout package not depending on jquery as required
+  // by Meteor 1.2.
+  api.use('jquery');
+  api.imply('jquery');
+  
+  // Workaround softwarereo:accounts-t9n package not depending on blaze as
+  // required by Meteor 1.2.
+  api.use('blaze');
+  api.imply('blaze');
+
   api.addFiles('accounts-patch-ui-tests.html', 'client');
   api.addFiles('accounts-patch-ui-tests.js', 'client');
 });
