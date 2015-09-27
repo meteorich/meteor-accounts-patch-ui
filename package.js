@@ -83,18 +83,21 @@ Package.onTest(function(api) {
   api.use('brettle:accounts-anonymous@0.3.1');
   api.use('brettle:accounts-patch-ui');
 
-  // Workaround useraccounts:iron-routing package not depending on tracker and
-  // ejson as required by Meteor 1.2.
-  api.use('ejson');
+  // Workaround iron:layout package not depending on tracker as required by
+  // Meteor 1.2.
   api.imply('tracker');
+
+  // Workaround iron:middleware-stack package not depending on ejson as required
+  // by Meteor 1.2.
+  api.use('ejson');
   api.imply('ejson');
 
-  // Workaround kadira:flow-layout package not depending on jquery as required
+  // Workaround kadira:blaze-layout package not depending on jquery as required
   // by Meteor 1.2.
   api.use('jquery');
   api.imply('jquery');
   
-  // Workaround softwarereo:accounts-t9n package not depending on blaze as
+  // Workaround softwarerero:accounts-t9n package not depending on blaze as
   // required by Meteor 1.2.
   api.use('blaze');
   api.imply('blaze');
