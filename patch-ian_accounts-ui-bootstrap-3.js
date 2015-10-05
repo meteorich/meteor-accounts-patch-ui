@@ -1,10 +1,10 @@
 "use strict";
 /* globals AccountsPatchUi */
 
-if (Package['accounts-ui-unstyled'] && Template.loginButtons) {
+if (Package['ian:accounts-ui-bootstrap-3'] && Template._loginButtons) {
   // Override global currentUser to hide users who are logged in but not
   // signed up, just for this template.
-  Template.loginButtons.helpers({
+  Template._loginButtons.helpers({
     currentUser: AccountsPatchUi.wrapWithSignedUp(function () {
       return Meteor.user();
     })

@@ -12,8 +12,7 @@ for an overview of the suite and a live demo.
 
 ## Features
 
-- Supports `accounts-ui` derivatives and `useraccounts:bootstrap` when using
-  `useraccounts:iron-routing`
+- Designed to support `accounts-ui` and `useraccounts:*` packages.
 
 - Provides a utility function to help monkey patch other packages
 
@@ -24,14 +23,27 @@ meteor add brettle:accounts-patch-ui
 
 ## Usage
 
-For `accounts-ui` derivatives and `useraccounts:bootstrap`, it should just work.
+For `accounts-ui`, `ian:accounts-ui-bootstrap-3`, and `useraccounts:bootstrap`,
+it has been tested and should just work. It has been designed to work with other
+`accounts-ui-unstyled` derivatives and `useraccounts:*` packages, but it has not
+been tested. Please report bugs.
 
 For other packages, you'll need to figure out which of their functions use
 `Meteor.userId()` or `Meteor.user()` to detect signed out users, and then wrap
-those functions using `AccountsPatchUi.wrapWithSignedUp(originalFunc)`.
-While `originalFunc` is running, `Meteor.userId()` and `Meteor.user()` will
-return `null` if the current user is not signed up according to
+those functions using `AccountsPatchUi.wrapWithSignedUp(originalFunc)`. While
+`originalFunc` is running, `Meteor.userId()` and `Meteor.user()` will return
+`null` if the current user is not signed up according to
 [`LoginState.signedUp()`](http://github.com/brettle/meteor-accounts-login-state).
+For example, if you wanted to override the global `currentUser` helper so that
+it returns `null` if the current us is not signed up, you'd do:
+
+```js
+Template.registerHelper("currentUser", 
+  AccountsPatchUi.wrapWithSignedUp(function () {
+    return Meteor.user();
+  })
+);
+```
 
 ## TODO
 

@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-patch-ui',
-  version: '0.1.1',
+  version: '0.1.2',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
     'who have not signed up.',
@@ -19,6 +19,7 @@ Package.onUse(function(api) {
   api.use('accounts-base', 'client');
   api.use('templating', 'client');
   api.use('accounts-ui-unstyled', 'client', { weak: true });
+  api.use('ian:accounts-ui-bootstrap-3@1.0.0 || 0.1.0', 'client', { weak: true });
 
   // Allows other packages/apps to help determine whether a user has signed up.
   api.use('brettle:accounts-login-state@0.0.3');
@@ -61,6 +62,7 @@ Package.onUse(function(api) {
   api.export('AccountsPatchUi');
   api.addFiles('accounts-patch-ui.js', 'client');
   api.addFiles('patch-accounts-ui-unstyled.js', 'client');
+  api.addFiles('patch-ian_accounts-ui-bootstrap-3.js', 'client');
   api.addFiles('patch-useraccounts.js', 'client');
 });
 
