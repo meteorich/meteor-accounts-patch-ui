@@ -1,5 +1,43 @@
 "use strict";
-/* globals AccountsAnonymous, AccountsTemplates, FlowRouter, Iron */
+/* globals AccountsAnonymous, AccountsTemplates, FlowRouter, Iron, 
+   AccountsPatchUi */
+Tinytest.addAsync(
+  'AccountsPatchUi - wrapWithSignedUp() does not exceed call stack size',
+  function(test, done) {
+    Meteor.logout(function(err) {
+      test.isUndefined(err, 'No logout error');
+      AccountsAnonymous.login(function(err) {
+        var userId = Meteor.userId();
+        var user = Meteor.user();
+        test.isUndefined(err, 'No login error');
+        _.wrap(
+          AccountsPatchUi.wrapWithSignedUp(function () {
+            test.isNull(Meteor.userId(), 'Meteor.userId() should return null');
+            test.isNull(Meteor.user(), 'Meteor.user() should return null');
+          }),
+          function (func) {
+            var origFindOne = Meteor.users.findOne;
+            Meteor.users.findOne = function (/*arguments*/) {
+              var savedFindOne = Meteor.users.findOne;
+              Meteor.users.findOne = origFindOne;
+              try {
+                test.equal(Meteor.userId(), userId, 'Meteor.userId() correct');
+                test.equal(Meteor.user(), user, 'Meteor.user() correct');
+                return origFindOne.apply(Meteor.users, arguments);
+              } finally {
+                Meteor.users.findOne = savedFindOne;
+              }
+            };
+            var retval = func.apply(this, _.rest(_.toArray(arguments)));
+            Meteor.users.findOne = origFindOne;
+            return retval;
+          })();
+        done();
+      });
+    });
+  }
+);
+
 Tinytest.add(
   'AccountsPatchUi - accounts-ui loginButtons is clickable',
   function (test) {
