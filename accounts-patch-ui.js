@@ -5,6 +5,11 @@
 // monkey patching.
 var meteorUserIdFunc = Meteor.userId;
 var meteorUserFunc = Meteor.user;
+var accountsCallLoginMethod = Accounts.callLoginMethod;
+
+var addServicePkg = Package['brettle:accounts-add-service'];
+var mergeUserErrorReason = addServicePkg && addServicePkg.AccountsAddService &&
+  addServicePkg.AccountsAddService._mergeUserErrorReason;
 
 /** Returns a function that will execute `func` with 
  * `Meteor.userId` set to `userIdFunc` and `Meteor.user` set to `userFunc`.
@@ -62,6 +67,22 @@ var signedUpUserFunc = wrapWithUserFuncs(meteorUserIdFunc, meteorUserFunc,
     return null;
   });
 
+var callLoginMethod = function(options) {
+  var origCallback = options && options.userCallback;
+  if (! origCallback) {
+    return accountsCallLoginMethod.apply(this, arguments);
+  }
+  options = _.clone(options);
+  options.userCallback = function (error) {
+    if (error.error === Accounts.LoginCancelledError.numericError &&
+        error.reason === mergeUserErrorReason) {
+      return origCallback.call(this);
+    } else {
+      return origCallback.apply(this, arguments);
+    }
+  }
+  return accountsCallLoginMethod.call(this, options);
+}
 
 function AccountsPatchUiConstructor() {}
 
@@ -76,23 +97,54 @@ _.extend(AccountsPatchUiConstructor.prototype, {
     return wrapWithUserFuncs(signedUpUserIdFunc, signedUpUserFunc, func);
   },
 
+  /** Returns a function that will execute the passed function with a version
+   * `Accounts.callLoginMethod()` (which is used by `Meteor.loginWithPassword()`
+   * and `Meteor.createUser()`) that calls the user's callback with no arguments
+   * (indicating success) if the login method returns the error that 
+   * `brettle:accounts-add-service` uses to indicate that the service was 
+   * merged into the current user's account.
+   * @param {Function} func - the function to wrap.
+   * @returns {Function} - the wrapped function
+   */
+  wrapWithMergedErrorSuppressed: function (func) {
+    return function ( /*arguments*/ ) {
+      var savedCallLoginMethod = Accounts.callLoginMethod;
+      Accounts.callLoginMethod = callLoginMethod;
+      try {
+        return func.apply(this, arguments);
+      } finally {
+        Accounts.callLoginMethod = savedCallLoginMethod;
+      }
+    };
+  },
+  
+  /** Returns a function has been wrapped with both
+   * `wrapWithMergedErrorSuppressed()` and `wrapWithSignedUp()`.
+   * @param {Function} func - the function to wrap.
+   * @returns {Function} - the wrapped function
+   */
+  wrap: function (func) {
+    return this.wrapWithMergedErrorSuppressed(
+      this.wrapWithSignedUp(func));
+  },
+
   _signedUpUser: signedUpUserFunc,
 
-  _wrapTemplateWithSignedUp: function (template) {
+  _wrapTemplate: function (template) {
     var self = this;
     if (!template) {
       return;
     }
-    self._wrapMethodsWithSignedUp(template.__helpers);
+    self._wrapMethods(template.__helpers);
     if (!_.isArray(template.__eventMaps)) {
       throw new TypeError('__eventMaps not an Array');
     }
     _.each(template.__eventMaps, function (value, index, eventMaps) {
-      self._wrapMethodsWithSignedUp(eventMaps[index]);
+      self._wrapMethods(eventMaps[index]);
     });
   },
 
-  _wrapMethodsWithSignedUp: function (obj) {
+  _wrapMethods: function (obj) {
     if (obj === undefined) {
       return;
     }
@@ -101,7 +153,7 @@ _.extend(AccountsPatchUiConstructor.prototype, {
     }
     _.each(obj, function (value, key) {
       if (_.isFunction(value)) {
-        obj[key] = AccountsPatchUi.wrapWithSignedUp(value);
+        obj[key] = AccountsPatchUi.wrap(value);
       }
     });
   }

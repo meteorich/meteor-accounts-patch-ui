@@ -25,12 +25,18 @@ function wrapFlowRouteHooksWithSignedUp(route) {
   });
 }
 
-AccountsPatchUi._wrapTemplateWithSignedUp(Template.atNavButton);
-AccountsPatchUi._wrapTemplateWithSignedUp(Template.atForm);
+AccountsPatchUi._wrapTemplate(Template.atNavButton);
+AccountsPatchUi._wrapTemplate(Template.atForm);
 
 var AccountsTemplates =
   Package['useraccounts:core'] &&
   Package['useraccounts:core'].AccountsTemplates;
+
+var submitCallback = AccountsTemplates && AccountsTemplates.submitCallback;
+if (submitCallback) {
+  AccountsTemplates.submitCallback
+    = AccountsPatchUi.wrapWithMergedErrorSuppressed(submitCallback);
+}
 if (Package['useraccounts:iron-routing']) {
   var IronRouter = Package['iron:router'] && Package['iron:router'].Router;
   if (AccountsTemplates && AccountsTemplates.routes && IronRouter) {

@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-patch-ui',
-  version: '0.1.5',
+  version: '0.1.6',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
     'who have not signed up.',
@@ -24,6 +24,7 @@ Package.onUse(function(api) {
 
   // Allows other packages/apps to help determine whether a user has signed up.
   api.use('brettle:accounts-login-state@0.0.3');
+  api.use('brettle:accounts-add-service@1.0.0', { weak: true });
 
   // Whatever UI variation is being used, it needs to load first so that
   // we can monkey patch it's atNav and atForm templates.
@@ -71,20 +72,30 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   api.versionsFrom('1.0.4');
   api.use('tinytest');
-  api.use('accounts-ui-unstyled');
   api.use('templating', 'client');
   api.use('underscore');
   api.use('tracker');
   api.use('accounts-password');
+  api.use('test-helpers');
+  api.use('random');
+  api.use('ejson');
   api.use('twbs:bootstrap');
-  api.use('useraccounts:bootstrap@1.12.0');
 
+  var ui = process.env.UI;
   // Uncomment one of the following two lines to depending on which useraccounts
   // routing package you want to test:
-  api.use('useraccounts:iron-routing@1.12.0');
-  //api.use('useraccounts:flow-routing@1.12.0');
+  if (ui === 'iron-routing') {
+    api.use('useraccounts:bootstrap@1.12.0');
+    api.use('useraccounts:iron-routing@1.12.0');    
+  } else if (ui === 'flow-routing') {
+    api.use('useraccounts:bootstrap@1.12.0');
+    api.use('useraccounts:flow-routing@1.12.0');
+  } else if (ui === 'accounts-ui') {
+    api.use('accounts-ui-unstyled');
+  }
 
   api.use('brettle:accounts-anonymous@0.3.1');
+  api.use('brettle:accounts-add-service@1.0.0');
   api.use('brettle:accounts-patch-ui');
 
   // Workaround iron:layout package not depending on tracker as required by
@@ -108,4 +119,5 @@ Package.onTest(function(api) {
 
   api.addFiles('accounts-patch-ui-tests.html', 'client');
   api.addFiles('accounts-patch-ui-tests.js', 'client');
+  api.addFiles('accounts-patch-ui-tests-server.js', 'server');
 });
