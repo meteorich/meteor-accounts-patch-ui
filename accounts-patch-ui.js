@@ -74,7 +74,7 @@ var callLoginMethod = function(options) {
   }
   options = _.clone(options);
   options.userCallback = function (error) {
-    if (error.error === Accounts.LoginCancelledError.numericError &&
+    if (error && error.error === Accounts.LoginCancelledError.numericError &&
         error.reason === mergeUserErrorReason) {
       return origCallback.call(this);
     } else {
