@@ -132,7 +132,33 @@ routerPkgName && Tinytest.addAsync(
   }
 );
 
-routerPkgName && AccountsTemplates.configureRoute('signIn');
+routerPkgName && Tinytest.addAsync(
+  'AccountsPatchUi - useraccounts - atSocial shows "Sign In" when anonymous',
+  function(test, done) {
+    test.isNotUndefined(Template.atSocial, 'Template.atSocial');
+    if (!Template.atNavButton) { return done(); }
+    Meteor.logout(function(err) {
+      test.isUndefined(err, 'No logout error');
+      var dataContext = { _id: 'fake', configured: true };
+      var actualHtml = Blaze.toHTMLWithData(Template.atSocial, dataContext);
+      test.include(actualHtml, 'Sign In with', 
+        'Shows "Login With" when not signed in');
+      AccountsAnonymous.login(function(err) {
+        test.isUndefined(err, 'No login error');
+        var actualHtml = Blaze.toHTMLWithData(Template.atSocial, dataContext);
+        test.include(actualHtml, 'Sign In with', 
+          'Shows "Login With" when anonymous');
+        done();
+      });
+    });
+  }
+);
+
+
+if (routerPkgName) {
+  AccountsTemplates.configureRoute('signIn');
+  AccountsTemplates.options.showAddRemoveServices = true;
+}
 
 routerPkgName && Tinytest.addAsync(
   'AccountsPatchUi - ' + routerPkgName + ' - routes anon like logged out',
@@ -176,6 +202,7 @@ routerPkgName && testAsyncMulti(
       AccountsAnonymous.login(expect());
     },
     function (test, expect) {
+      Tracker.flush();
       AccountsTemplates.setState('signUp');
       div = renderToDiv(Template.atForm);
       document.body.appendChild(div);

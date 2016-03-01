@@ -27,6 +27,7 @@ function wrapFlowRouteHooksWithSignedUp(route) {
 
 AccountsPatchUi._wrapTemplate(Template.atNavButton);
 AccountsPatchUi._wrapTemplate(Template.atForm);
+AccountsPatchUi._wrapTemplate(Template.atSocial);
 
 var AccountsTemplates =
   Package['useraccounts:core'] &&
