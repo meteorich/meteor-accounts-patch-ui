@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-patch-ui',
-  version: '0.1.8',
+  version: '0.1.9',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
     'who have not signed up.',
@@ -18,6 +18,7 @@ Package.onUse(function(api) {
   api.use('underscore', 'client');
   api.use('accounts-base', 'client');
   api.use('templating', 'client');
+  api.use('tracker', 'client');
   api.use('accounts-ui-unstyled', 'client', { weak: true });
   api.use('ian:accounts-ui-bootstrap-3@1.0.0 || 0.1.0', 'client', 
     { weak: true });
@@ -53,7 +54,8 @@ Package.onUse(function(api) {
   api.use('iron:router@=1.0.12 || =1.0.11 || =1.0.10 || =1.0.9', 'client', 
     { weak: true });
   // Among other things, we use the internal _routesMap and _action properties.
-  api.use('kadira:flow-router@=2.7.0 || =2.6.2 || =2.4.0 || =2.3.0 || =2.2.0', 
+  // Also need the stop() function passed to triggers which was added in 2.5.0.
+  api.use('kadira:flow-router@=2.7.0 || =2.6.2 || =2.5.0', 
     'client', { weak: true });
 
   // We don't rely on the internals of these packages, but we do rely on

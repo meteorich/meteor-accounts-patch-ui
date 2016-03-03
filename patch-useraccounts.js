@@ -1,16 +1,38 @@
 "use strict";
-/* globals AccountsPatchUi, Iron */
+/* globals AccountsPatchUi, Iron, Tracker */
+
+// Remember the official Meteor versions of the functions we will be
+// monkey patching.
+var meteorUserIdFunc = Meteor.userId;
+var meteorUserFunc = Meteor.user;
+
+function isPageLoading() {
+  return meteorUserIdFunc() && !meteorUserFunc();
+}
 
 function wrapRouteHooksWithSignedUp(route) {
   _.each(Iron.Router.HOOK_TYPES, function(hookType) {
     if (_.isFunction(route.options[hookType])) {
+      var hook = route.options[hookType];
       route.options[hookType] =
-        AccountsPatchUi.wrapWithSignedUp(route.options[hookType]);
+        AccountsPatchUi.wrapWithSignedUp(function (/* arguments */) {
+          // Don't do anything if the page is loading because  Meteor.user()
+          // won't be set (even thouth Meteor.userId() will) and thus
+          // LoginState.hasSignedUp() won't be valid. This is reactive, so the
+          // hooks will get called again once we are logged in.
+          if (isPageLoading()) {
+            _.isFunction(this.next) && this.next();
+          } else {
+            hook.apply(this, _.toArray(arguments));            
+          }
+        });
     }
   });
 }
 
 function wrapFlowRouteHooksWithSignedUp(route) {
+  var FlowRouter =
+    Package['kadira:flow-router'] && Package['kadira:flow-router'].FlowRouter;
   if (_.isFunction(route._action)) {
     route._action = AccountsPatchUi.wrapWithSignedUp(route._action);
   }
@@ -18,7 +40,24 @@ function wrapFlowRouteHooksWithSignedUp(route) {
     if (_.isArray(route.options[hookType])) {
       _.each(route.options[hookType], function(cb, i, arr) {
         if (_.isFunction(cb)) {
-          arr[i] = AccountsPatchUi.wrapWithSignedUp(cb);
+          arr[i] = 
+            AccountsPatchUi.wrapWithSignedUp(function (ctx, redir, stop) {
+              // Don't do anything if the page is loading because Meteor.user()
+              // won't be set (even thouth Meteor.userId() will) and thus
+              // LoginState.hasSignedUp() won't be valid. Instead, once the page
+              // isn't loading, reload the current route.
+              if (hookType === 'triggersEnter' && isPageLoading()) {
+                stop();
+                Tracker.autorun(function(computation) {
+                  if (! isPageLoading()) {
+                    FlowRouter.reload();
+                    computation.stop();
+                  }
+                });
+              } else {
+                cb.apply(this, _.toArray(arguments));
+              }
+          });
         }
       });
     }

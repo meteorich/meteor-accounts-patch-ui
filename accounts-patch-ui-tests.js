@@ -160,11 +160,22 @@ if (routerPkgName) {
   AccountsTemplates.options.showAddRemoveServices = true;
 }
 
-routerPkgName && Tinytest.addAsync(
+var anonToken;
+var anonUserId;
+routerPkgName && testAsyncMulti(
   'AccountsPatchUi - ' + routerPkgName + ' - routes anon like logged out',
-  function(test, done) {
-    Meteor.logout(function(err) {
-      test.isUndefined(err, 'No logout error');
+  [    
+    function(test, expect) {
+      Meteor.logout(expect());
+    },
+    function(test, expect) {
+      AccountsAnonymous.login(expect(function (error) {
+        test.isUndefined(error, 'No login error');
+        anonToken = Accounts._storedLoginToken();
+        anonUserId = Meteor.userId();
+      }));
+    },
+    function(test, expect) {    
       // Need to start at a path that isn't handled by the
       // useraccounts:*-routing to ensure that going to an accounts-related
       // route triggers a change in state. Important for
@@ -172,22 +183,28 @@ routerPkgName && Tinytest.addAsync(
       // useraccounts:flow-routing or kadira:flow-router.
       theRouter.go('/');
       AccountsTemplates.setState('hide');
+      // When loading the '/sign-in' page by typing in the URL, Meteor will
+      // set the user id based on the value from local storage and then attempt
+      // to login with the server. While the login is in flight,
+      // Meteor.userId() is set, but Meteor.user() (and thus
+      // LoginState.hasSignedUp) is not. We simulate that situation here to
+      // make sure that routing still works properly in that case.
+      Accounts.makeClientLoggedOut();
+      Meteor.users.remove(anonUserId);
+      Meteor.connection.setUserId(anonUserId);
+      Meteor.loginWithToken(anonToken, expect());
+      test.isUndefined(Meteor.user(), 'test needs Meteor.user() undefined');
       theRouter.go('/sign-in');
       Tracker.flush();
+    },
+    function (test, expect) {
+      Tracker.afterFlush(expect());
+    },
+    function (test, expect) {
       test.equal(AccountsTemplates.getState(), 'signIn',
-        'Logged out user routed to sign in');
-      AccountsAnonymous.login(function(err) {
-        test.isUndefined(err, 'No login error');
-        theRouter.go('/'); // See above for why this is needed.
-        AccountsTemplates.setState('hide');
-        theRouter.go('/sign-in');
-        Tracker.flush();
-        test.equal(AccountsTemplates.getState(), 'signIn',
-          'Anonymous user routed to sign in');
-        done();
-      });
-    });
-  }
+        'Anonymous user routed to sign in');
+    }
+  ]
 );
 
 var div;

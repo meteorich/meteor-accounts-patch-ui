@@ -4,11 +4,27 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.9] 2016-03-02
+
+### Fixed
+
+Fixed [bug #4](https://github.com/brettle/meteor-accounts-patch-ui/issues/4) by
+monkey patching the route hooks to postpone/reload the route until after the
+page has finished loading to so that we can reliably detect anonymous users.
+
+## [0.1.8] 2016-02-29
+
+### Fixed
+
+Fixed [bug #2](https://github.com/brettle/meteor-accounts-patch-ui/issues/2) by
+monkey patching the social button helpers so that the correct text is displayed
+to anonymous users.
+
 ## [0.1.7] 2016-02-28
 
 ### Fixed
 
-Fixed [bug #3](https://github.com/brettle/meteor-accounts-patch-ui/issues/3) checking when callback passed to monkey patched
+Fixed [bug #3](https://github.com/brettle/meteor-accounts-patch-ui/issues/3) by checking when callback passed to monkey patched
 `callLoginMethod` was not passed an error. Thanks to [blackslate](https://github.com/blackslate) for finding
 and fixing the problem!
 
