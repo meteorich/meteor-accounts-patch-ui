@@ -4,6 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.10] 2016-03-06
+
+### Fixed
+
+Updated to reflect compatibility with flow-router <= 2.10.1.
+
 ## [0.1.9] 2016-03-02
 
 ### Fixed
@@ -36,6 +42,9 @@ Moved the fix for brettle/meteor-accounts-deluxe#1 (Red text error message when
 adding password account) into this package from `brettle:workaround-issue-5110`
 (used by `brettle:accounts-add-service`).
 
-[Unreleased]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.7...HEAD
+[Unreleased]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.10...HEAD
+[0.1.10]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.9...v0.1.10
+[0.1.9]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.8...v0.1.9
+[0.1.8]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.7...v0.1.8
 [0.1.7]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.6...v0.1.7
 [0.1.6]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.5...v0.1.6

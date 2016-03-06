@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-patch-ui',
-  version: '0.1.9',
+  version: '0.1.10',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
     'who have not signed up.',
@@ -55,7 +55,8 @@ Package.onUse(function(api) {
     { weak: true });
   // Among other things, we use the internal _routesMap and _action properties.
   // Also need the stop() function passed to triggers which was added in 2.5.0.
-  api.use('kadira:flow-router@=2.7.0 || =2.6.2 || =2.5.0', 
+  api.use('kadira:flow-router' +
+    '@=2.10.1 || =2.9.0 || =2.8.0 || =2.7.0 || =2.6.2 || =2.5.0', 
     'client', { weak: true });
 
   // We don't rely on the internals of these packages, but we do rely on
