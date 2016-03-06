@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-Fixed [bug #4](https://github.com/brettle/meteor-accounts-patch-ui/issues/4) by
+Fixed [bug #5](https://github.com/brettle/meteor-accounts-patch-ui/issues/5) by
 monkey patching the route hooks to postpone/reload the route until after the
 page has finished loading to so that we can reliably detect anonymous users.
 
