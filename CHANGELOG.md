@@ -4,6 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.11] 2016-04-02
+
+### Fixed
+
+Fix [bug #6] by indicating support for blaze <= 2.1.5. Meteor 1.3 includes blaze
+2.1.5.
+
 ## [0.1.10] 2016-03-06
 
 ### Fixed
