@@ -8,8 +8,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-Fix [bug #6] by indicating support for blaze <= 2.1.5. Meteor 1.3 includes blaze
-2.1.5.
+Fix [bug #6](https://github.com/brettle/meteor-accounts-patch-ui/issues/6) by
+indicating support for blaze <= 2.1.5. Meteor 1.3 includes blaze 2.1.5.
 
 ## [0.1.10] 2016-03-06
 
@@ -49,7 +49,8 @@ Moved the fix for brettle/meteor-accounts-deluxe#1 (Red text error message when
 adding password account) into this package from `brettle:workaround-issue-5110`
 (used by `brettle:accounts-add-service`).
 
-[Unreleased]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.10...HEAD
+[Unreleased]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.11...HEAD
+[0.1.11]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.10...v0.1.11
 [0.1.10]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.9...v0.1.10
 [0.1.9]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.8...v0.1.9
 [0.1.8]: https://github.com/brettle/meteor-accounts-patch-ui/compare/v0.1.7...v0.1.8
