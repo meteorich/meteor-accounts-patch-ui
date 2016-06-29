@@ -2,7 +2,6 @@
 
 export URL='http://localhost:4096/'
 coproc meteor test-packages ./ --driver-package test-in-console -p 4096
-
 meteor_line=""
 until [ "$meteor_line" == "=> App running at: http://localhost:4096/" ]; do
   read -u ${COPROC[0]} meteor_line

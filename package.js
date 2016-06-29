@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'brettle:accounts-patch-ui',
-  version: '0.1.12',
+  version: '0.1.13',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
     'who have not signed up.',
@@ -53,12 +53,12 @@ Package.onUse(function(api) {
     'client');
   // Among other things, we assume that the hooks in the options object are used
   // directly, not copied.
-  api.use('iron:router@=1.0.12 || =1.0.11 || =1.0.10 || =1.0.9', 'client', 
-    { weak: true });
+  api.use('iron:router@=1.0.13 || 1.0.12 || =1.0.11 || =1.0.10 || =1.0.9', 
+    'client', { weak: true });
   // Among other things, we use the internal _routesMap and _action properties.
   // Also need the stop() function passed to triggers which was added in 2.5.0.
   api.use('kadira:flow-router' +
-    '@=2.10.1 || =2.9.0 || =2.8.0 || =2.7.0 || =2.6.2 || =2.5.0', 
+    '@=2.12.1 || =2.10.1 || =2.9.0 || =2.8.0 || =2.7.0 || =2.6.2 || =2.5.0', 
     'client', { weak: true });
 
   // We don't rely on the internals of these packages, but we do rely on
@@ -88,12 +88,20 @@ Package.onTest(function(api) {
 
   // Test the useraccounts routing package identified by the UI environment var
   var ui = process.env.UI;
+  
+  // Set versions to test against below.
+  var blazeVersion = '2.1.8';
+  var useraccountsVersion = '1.14.2';
+  var ironRouterVersion = '1.0.13';
+  var kadiraFlowRouterVersion = '2.12.1';
   if (ui === 'iron-routing') {
-    api.use('useraccounts:bootstrap@1.12.0');
-    api.use('useraccounts:iron-routing@1.12.0');    
+    api.use('useraccounts:bootstrap@' + useraccountsVersion);
+    api.use('useraccounts:iron-routing@' + useraccountsVersion);
+    api.use('iron:router@' + ironRouterVersion);
   } else if (ui === 'flow-routing') {
-    api.use('useraccounts:bootstrap@1.12.0');
-    api.use('useraccounts:flow-routing@1.12.0');
+    api.use('useraccounts:bootstrap@' + useraccountsVersion);
+    api.use('useraccounts:flow-routing@' + useraccountsVersion);
+    api.use('kadira:flow-router@' + kadiraFlowRouterVersion);
   } else if (ui === 'accounts-ui') {
     api.use('accounts-ui-unstyled');
   }
@@ -115,11 +123,11 @@ Package.onTest(function(api) {
   // by Meteor 1.2.
   api.use('jquery');
   api.imply('jquery');
-  
+
   // Workaround softwarerero:accounts-t9n package not depending on blaze as
   // required by Meteor 1.2.
-  api.use('blaze');
-  api.imply('blaze');
+  api.use('blaze@' + blazeVersion);
+  api.imply('blaze@' + blazeVersion);
 
   api.addFiles('accounts-patch-ui-tests.html', 'client');
   api.addFiles('accounts-patch-ui-tests.js', 'client');
