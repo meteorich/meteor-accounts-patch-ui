@@ -1,7 +1,7 @@
 "use strict";
 
 Package.describe({
-  name: 'brettle:accounts-patch-ui',
+  name: 'lpender:accounts-patch-ui',
   version: '0.1.14',
   // Brief, one-line summary of the package.
   summary: 'Monkey patches accounts UI packages to support logged in users ' +
