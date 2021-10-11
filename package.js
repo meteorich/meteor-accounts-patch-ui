@@ -13,8 +13,9 @@ Package.describe({
   documentation: 'README.md'
 });
 
-Package.onUse(function(api) {
+Package.onUse(function (api) {
   api.versionsFrom('1.0.4');
+  api.versionsFrom('2.4');
   api.use('underscore', 'client');
   api.use('accounts-base', 'client');
   api.use('templating', 'client');
@@ -72,7 +73,7 @@ Package.onUse(function(api) {
   api.addFiles('patch-useraccounts.js', 'client');
 });
 
-Package.onTest(function(api) {
+Package.onTest(function (api) {
   api.versionsFrom('1.0.4');
   api.use('tinytest');
   api.use('templating', 'client');
